@@ -23,10 +23,12 @@ if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
 //  installing. If they don't match your app's configuration, users will
 //  see an error page.
 
-// Replace the following with the values from your app auth config, 
+// Replace the following with the values from your app auth config,
 // or set them as environment variables before running.
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
+// On successful install, users will be redirected to /oauth-callback
+const REDIRECT_URI = `${process.env.DOMAIN}/oauth-callback`
 
 // Scopes for this app will default to `crm.objects.contacts.read`
 // To request others, set the SCOPE environment variable instead
@@ -35,8 +37,6 @@ if (process.env.SCOPE) {
     SCOPES = (process.env.SCOPE.split(/ |, ?|%20/)).join(' ');
 }
 
-// On successful install, users will be redirected to /oauth-callback
-const REDIRECT_URI = `http://localhost:${PORT}/oauth-callback`;
 
 //===========================================================================//
 
@@ -46,7 +46,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
- 
+
 //================================//
 //   Running the OAuth 2.0 Flow   //
 //================================//
@@ -215,5 +215,5 @@ app.get('/error', (req, res) => {
   res.end();
 });
 
-app.listen(PORT, () => console.log(`=== Starting your app on http://localhost:${PORT} ===`));
-opn(`http://localhost:${PORT}`);
+app.listen(PORT, () => console.log(`=== Starting your app on ${process.env.DOMAIN} ===`));
+opn(`${process.env.DOMAIN}`);
